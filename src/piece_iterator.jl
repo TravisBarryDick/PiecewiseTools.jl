@@ -1,5 +1,3 @@
-import Base: start, next, done, eltype, length
-
 struct PieceIterator{T}
     pw::Piecewise{T}
     ivl::Interval
@@ -13,19 +11,19 @@ function PieceIterator(pw::Piecewise, ivl::Interval)
     return PieceIterator(pw, ivl, first_ix, last_ix)
 end
 
-start(pi::PieceIterator) = pi.first_ix
-
-function next(pi::PieceIterator, state::Int)
-    lo = state == pi.first_ix ? pi.ivl.lo : pi.pw.boundaries[state-1]
-    hi = state < pi.last_ix ? pi.pw.boundaries[state] : pi.ivl.hi
-    ((Interval(lo,hi), pi.pw.values[state]), state+1)
+function Base.iterate(pi::PieceIterator, state::Int = pi.first_ix)
+    if state > pi.last_ix
+        return nothing
+    else
+        lo = state == pi.first_ix ? pi.ivl.lo : pi.pw.boundaries[state-1]
+        hi = state < pi.last_ix ? pi.pw.boundaries[state] : pi.ivl.hi
+        return ((Interval(lo,hi), pi.pw.values[state]), state+1)
+    end
 end
 
-done(pi::PieceIterator, state::Int) = state > pi.last_ix
+Base.eltype(pi::PieceIterator{T}) where {T} = Tuple{Interval,T}
 
-eltype(pi::PieceIterator{T}) where {T} = Tuple{Interval,T}
-
-length(pi::PieceIterator) = pi.last_ix - pi.first_ix + 1
+Base.length(pi::PieceIterator) = pi.last_ix - pi.first_ix + 1
 
 """
 Returns an iterator over the pieces of `pw`. Each piece is represented as a

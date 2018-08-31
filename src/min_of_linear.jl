@@ -6,15 +6,16 @@ right is chosen. Correctly handles cases when `x in [-Inf, Inf]`.
 """
 function indmin_of_linear_at(lfs::Vector{LinearFunction}, x::Number)
     if x == -Inf
-        return indmax(lf.slope for lf in lfs)
+        return argmax([lf.slope for lf in lfs])
     elseif x == Inf
-        return indmin(lf.slope for lf in lfs)
+        return argmin([lf.slope for lf in lfs])
     else
         best_ix = 1
         best_value = lfs[1](x)
         for ix in 2:length(lfs)
             value = lfs[ix](x)
-            if value < best_value || (value == best_value && lfs[ix].slope < lfs[best_ix].slope)
+            approx_equal = abs(value - best_value) < 1e-6
+            if value < best_value || (approx_equal && lfs[ix].slope < lfs[best_ix].slope)
                 best_ix = ix
                 best_value = value
             end

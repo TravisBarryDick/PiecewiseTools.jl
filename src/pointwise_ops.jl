@@ -9,7 +9,7 @@ function pointwise(f::Function, pws::Vararg{Piecewise})
     values = [f((pw.values[1] for pw in pws)...)]
 
     pw_queue = DataStructures.PriorityQueue{Int,Float64}()
-    current_ix = Vector{Int}(length(pws))
+    current_ix = Vector{Int}(undef, length(pws))
     for (pw_ix, pw) in enumerate(pws)
         if length(pw.boundaries) > 0
             pw_queue[pw_ix] = pw.boundaries[1]

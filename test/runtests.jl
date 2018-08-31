@@ -1,5 +1,5 @@
 using PiecewiseTools
-using Base.Test
+using Test
 
 include("test_piecewise_type.jl")
 include("test_pointwise_ops.jl")
