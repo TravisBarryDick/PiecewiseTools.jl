@@ -23,9 +23,10 @@ end
 
 LinearIntersection(kind::IntersectionKind) = LinearIntersection(kind, NaN)
 
+"Finds the intersection of two linear functions."
 function intersectionof(f::LinearFunction, g::LinearFunction)
-    if (f.slope == g.slope)
-        if (f.intercept == g.intercept)
+    if abs(f.slope - g.slope) < 1e-10
+        if abs(f.intercept - g.intercept) < 1e-10
             return LinearIntersection(everywhere)
         else
             return LinearIntersection(nowhere)
