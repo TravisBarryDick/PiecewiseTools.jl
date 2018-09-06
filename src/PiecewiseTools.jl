@@ -1,7 +1,7 @@
 module PiecewiseTools
 
 include("piecewise_type.jl")
-export Piecewise, num_pieces, Interval
+export Piecewise, num_pieces, get_piece, Interval
 
 include("pointwise_ops.jl")
 export pointwise
