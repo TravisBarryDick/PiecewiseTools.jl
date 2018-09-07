@@ -25,25 +25,23 @@ function indmin_of_linear_at(lfs::Vector{LinearFunction}, x::Number)
 end
 
 """
-Given a vector `lfs` of linear functions and an interval `ivl`, returns a
-piecewise constant function mapping points `x` in the interval to the index of
+Given a vector `lfs` of linear functions and an interval `domain`, returns a
+piecewise constant function mapping points `x` in the domain to the index of
 the linear function of minimal value at `x`. Ties are broken by chosing the
 linear function of that is the minimizer to the right of the intersection. If
 two linear functions are exactly equal, then the tie between them is broken
-arbitrarily. Points outside the interval are mapped to the minimizer at the
-corresponding end point of the interval. If there are `N` linear functions and
-`K` of them appear as the minimizer in the interval `ivl`, then the running time
-is `O(KN)`.
+arbitrarily. If there are `N` linear functions and `K` of them appear as the
+minimizer in the interval `domain`, then the running time is `O(KN)`.
 """
-function indmin_of_linear(lfs::Vector{LinearFunction}, ivl = Interval(-Inf,Inf))
-    x = ivl.lo
+function indmin_of_linear(lfs::Vector{LinearFunction}, domain = Interval(-Inf,Inf))
+    x = domain.lo
 
-    boundaries = Float64[]
+    boundaries = Float64[domain.lo]
     values = Int[indmin_of_linear_at(lfs, x)]
 
-    while x < ivl.hi
+    while x < domain.hi
         current_minimizer = lfs[values[end]]
-        boundary = ivl.hi
+        boundary = domain.hi
         for (i,lf) in enumerate(lfs)
             intersection = intersectionof(current_minimizer, lf)
             if intersection.kind == atpoint && intersection.location > x
@@ -51,11 +49,13 @@ function indmin_of_linear(lfs::Vector{LinearFunction}, ivl = Interval(-Inf,Inf))
             end
         end
         x = boundary
-        if (boundary < ivl.hi)
+        if (boundary < domain.hi)
             push!(boundaries, boundary)
             push!(values, indmin_of_linear_at(lfs, x))
         end
     end
+
+    push!(boundaries, domain.hi)
 
     return Piecewise(boundaries, values)
 end
