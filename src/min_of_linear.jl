@@ -4,7 +4,7 @@ of the function with the minimum value at `x`. If there are ties at `x`, then
 the function that is the minimizer in the limit as `y` approaches `x` from the
 right is chosen. Correctly handles cases when `x in [-Inf, Inf]`.
 """
-function indmin_of_linear_at(lfs::Vector{LinearFunction}, x::Number)
+function indmin_of_linear_at(lfs, x::Number)
     if x == -Inf
         return argmax([lf.slope for lf in lfs])
     elseif x == Inf
@@ -33,7 +33,7 @@ two linear functions are exactly equal, then the tie between them is broken
 arbitrarily. If there are `N` linear functions and `K` of them appear as the
 minimizer in the interval `domain`, then the running time is `O(KN)`.
 """
-function indmin_of_linear(lfs::Vector{LinearFunction}, domain = Interval(-Inf,Inf))
+function indmin_of_linear(lfs, domain = Interval(-Inf,Inf))
     x = domain.lo
 
     boundaries = Float64[domain.lo]
