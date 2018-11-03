@@ -7,7 +7,7 @@ include("pointwise_ops.jl")
 export pointwise
 
 include("piece_iterator.jl")
-export PieceIterator
+export PieceIterator, ReversePieceIterator
 
 include("linear_functions.jl")
 export LinearFunction

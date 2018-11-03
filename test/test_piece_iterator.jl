@@ -5,6 +5,10 @@
         pwi = PieceIterator(pw)
         @test length(pwi) == 1
         @test first(pwi) == (Interval(-Inf,Inf), 0)
+
+        pwi = ReversePieceIterator(pw)
+        @test length(pwi) == 1
+        @test first(pwi) == (Interval(-Inf,Inf),0)
     end
 
     @testset "two pieces" begin
@@ -14,6 +18,12 @@
         @test typeof(ps) == Vector{Tuple{Interval,Int}}
         @test ps[1] == (Interval(-Inf, 0), 0)
         @test ps[2] == (Interval(0, Inf), 1)
+
+        ps = collect(ReversePieceIterator(pw))
+        @test length(ps) == 2
+        @test typeof(ps) == Vector{Tuple{Interval,Int}}
+        @test ps[1] == (Interval(0, Inf), 1)
+        @test ps[2] == (Interval(-Inf, 0), 0)
     end
 
 end
