@@ -42,4 +42,15 @@
         @test pw_pairs(3) == ("lo", "hi")
     end
 
+    @testset "limited domain" begin
+        pw_a = Piecewise([0, 1, 3], ["left", "right"])
+        pw_b = Piecewise([0, 2, 3], ["left", "right"])
+        pw_pairs = pointwise((a,b) -> (a,b), pw_a, pw_b)
+        @test num_pieces(pw_pairs) == 3
+        @test domain(pw_pairs) == Interval(0,3)
+        @test get_piece(pw_pairs, 1) == (Interval(0,1), ("left", "left"))
+        @test get_piece(pw_pairs, 2) == (Interval(1,2), ("right", "left"))
+        @test get_piece(pw_pairs, 3) == (Interval(2,3), ("right", "right"))
+    end
+
 end
