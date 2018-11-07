@@ -15,4 +15,7 @@ export LinearFunction
 include("min_of_linear.jl")
 export indmin_of_linear_at, indmin_of_linear
 
+include("numeric_operations.jl")
+export mean
+
 end

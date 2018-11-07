@@ -63,3 +63,8 @@ function (piecewise::Piecewise)(x::Number)
     end
     piecewise.values[ix]
 end
+
+import Base.==
+function ==(a::Piecewise, b::Piecewise)
+    all(a.boundaries .== b.boundaries) && all(a.values .== b.values)
+end
