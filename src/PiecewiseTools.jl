@@ -18,4 +18,7 @@ export indmin_of_linear_at, indmin_of_linear
 include("numeric_operations.jl")
 export mean
 
+include("utilities.jl")
+export sample, compress
+
 end
