@@ -10,7 +10,12 @@ function sample(f::Piecewise{T}, n) where {T}
     xs, ys
 end
 
-
+"""
+Given a piecewise constant function `f`, returns a new piecewise constant
+function `g` such that `g(x) == f(x)` for all `x`, but the number of pieces
+in the definition of `g` is minimal. In other words, it removes consecutive
+pieces in `f` with the same value.
+"""
 function compress(f::Piecewise{T}) where {T}
     boundaries = Float64[]
     values = T[]
