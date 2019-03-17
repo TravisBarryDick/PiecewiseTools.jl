@@ -19,6 +19,6 @@ include("numeric_operations.jl")
 export mean
 
 include("utilities.jl")
-export sample, compress
+export sample, get_plot_points, compress
 
 end

@@ -6,6 +6,14 @@
         @test sample(f, 5) == ([0, 0.5, 1, 1.5, 2], ["left", "left", "right", "right", "right"])
     end
 
+    @testset "get_plot_points" begin
+        f = Piecewise([0,1], [0])
+        @test get_plot_points(f) == ([0, 1], [0, 0])
+
+        f = Piecewise([0, 1, 2], [0, 1])
+        @test get_plot_points(f) == ([0, 1, 1, 2], [0, 0, 1, 1])
+    end
+
     @testset "compress" begin
         f = Piecewise([0, 1], ["test"])
         @test compress(f) == Piecewise([0,1], ["test"])

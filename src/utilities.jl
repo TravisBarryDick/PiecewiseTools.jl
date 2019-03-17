@@ -11,6 +11,22 @@ function sample(f::Piecewise{T}, n) where {T}
 end
 
 """
+Returns two vectors `xs` and `ys` that encode the graph of the function `f`.
+This is very helpful for plotting `Piecewise{Float64}` instances.
+"""
+function get_plot_points(f::Piecewise{T}) where {T}
+    xs = Float64[]
+    ys = T[]
+    for (ivl, v) in PieceIterator(f)
+        push!(xs, ivl.lo)
+        push!(xs, ivl.hi)
+        push!(ys, v)
+        push!(ys, v)
+    end
+    xs, ys
+end
+
+"""
 Given a piecewise constant function `f`, returns a new piecewise constant
 function `g` such that `g(x) == f(x)` for all `x`, but the number of pieces
 in the definition of `g` is minimal. In other words, it removes consecutive
