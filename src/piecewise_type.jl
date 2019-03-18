@@ -9,6 +9,12 @@ struct Interval
     hi::Float64
 end
 
+"Tests if `x` is contained in `[ivl.lo, ivl.hi)`."
+contains(ivl::Interval, x) = ivl.lo <= x < ivl.hi
+
+"Tests if `x` is contained in `[ivl.lo, ivl.hi]`."
+contains_closed(ivl::Interval, x) = ivl.lo <= x <= ivl.hi
+
 """
 Represents a piecewise constant function from the real numbers to elements of
 `T`. Note that this can be used to represent piecewise defined functions by
@@ -50,18 +56,28 @@ function get_piece(pw::Piecewise, ix)
     (ivl, value)
 end
 
-"Evaluates the piecewise function `pw` at `x`."
-function (piecewise::Piecewise)(x::Number)
-    ix = searchsortedlast(piecewise.boundaries, x)
-    if ix == 0
+"Returns the index of the piece of `pw` containing `x`."
+function get_piece_index(pw::Piecewise, x)
+    if !contains_closed(domain(pw), x)
         throw(DomainError(x, "The argument is outside the domain of the piecewise function"))
     end
-    # We do this to allow evaluation of the function at the right end-point
-    # of its domain.
-    if ix == length(piecewise.boundaries)
+    ix = searchsortedlast(pw.boundaries, x)
+    # We do this so that the upper end of `domain(pw)` belongs to the final piece
+    if ix == length(pw.boundaries)
         ix -= 1
     end
-    piecewise.values[ix]
+    ix
+end
+
+"Returns the `(ivl, value)` pair describing the piece of `pw` containing `x`."
+function get_piece_containing(pw::Piecewise, x)
+    get_piece(pw, get_piece_index(pw, x))
+end
+
+"Evaluates the piecewise function `pw` at `x`."
+function (pw::Piecewise)(x::Number)
+    ix = get_piece_index(pw, x)
+    pw.values[ix]
 end
 
 import Base.==
